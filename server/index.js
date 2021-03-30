@@ -5,8 +5,7 @@ const axios = require('axios');
 // const db = require('../database/mysql.js'); // USE FOR MYSQL
 const db = require('../database/mongo.js'); // USE FOR MONGO
 
-
-app.use(express.static(__dirname + '/../client/dist'));
+app.use(express.static('client/dist'));
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
@@ -25,10 +24,8 @@ const months = {
   december: 12
 }
 
-// refactor to async await
-app.post('/', async (req, res) => {
+app.post('/newDate', async (req, res) => {
   try {
-  // console.log('server test', req.body)
   let cased = req.body.month.toLowerCase()
   if (months[cased]) {
     let apiRes = await axios(`http://history.muffinlabs.com/date/${months[cased]}/${req.body.day}}`)
@@ -46,25 +43,16 @@ app.post('/', async (req, res) => {
   }
 })
 
-// MYSQL ONLOAD
-// app.get('/items', function (req, res) {
-//   db.selectAll(function(data) {
-//     res.send(data)
-//   })
-// });
-
-// MONGO ONLOAD
-app.get('/items', function (req, res) {
-  db.selectAll(function(err, data) {
-    if (err) {
-      console.log(err)
-    } else {
-      res.status(200).send(data)
-    }
-  })
+app.get('/lastFiveDates', async (req, res) => {
+  try {
+    let results = await db.lastFive()
+    res.status(200).send(results)
+  } catch(e) {
+    console.log('server get items error:',e)
+  }
 });
 
-app.listen(port, function() {
+app.listen(port, () => {
   console.log(`listening at port ${port}.`);
 });
 

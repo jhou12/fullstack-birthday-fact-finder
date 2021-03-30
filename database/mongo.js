@@ -14,30 +14,29 @@ const itemSchema = mongoose.Schema({
 
 const Birthday = mongoose.model('Item', itemSchema);
 
+let lastFive = async () => {
+  try {
+    let results = await Birthday.find({}).sort({'lookup': -1}).limit(5)
+    return results
+    } catch(e) {
+    console.log('db lastFive error:',e)
+  }
+}
+
 let save = async (doc) => {
   try {
     await Birthday.findOneAndUpdate({"date": doc.date}, doc, {upsert: true, useFindAndModify: false})
-    let results = await Birthday.find({}).sort({'lookup': -1}).limit(5)
+    let results = await lastFive()
     let formatted = results.map(date => {
       return date._doc
     })
-    console.log('db test', formatted)
     return formatted
   } catch(e) {
     console.log('db save error:',e)
   }
 }
 
-let selectAll = async () => {
-  try {
-    let results = await Birthday.find({}).sort({'lookup': -1}).limit(5)
-    return results
-  } catch(e) {
-    console.log('db selectAll error:',e)
-  }
-}
-
 module.exports = {
-  selectAll,
+  lastFive,
   save,
 }

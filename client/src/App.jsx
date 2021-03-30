@@ -22,7 +22,7 @@ const App = (props) => {
     date.month = month
     date.day = day
     date.lookup = Date.now()
-    axios.post('/', date)
+    axios.post('/newDate', date)
     .then(res => {
       console.log('client test', res.data)
       setItems(res.data)
@@ -30,9 +30,9 @@ const App = (props) => {
     })
   }
   useEffect(() => {
-    axios('/items')
+    axios('/lastFiveDates')
     .then(res => {
-      setItems(res)
+      setItems(res.data)
     })
   }, [])
   return (
