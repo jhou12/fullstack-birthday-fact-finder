@@ -1,31 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import styled from 'styled-components';
-import Styles, { Container, Column, Title, Emoji } from './Styles.js';
+import Blurb from './Blurb.jsx';
 import List from './List.jsx';
 
-const App = () => {
-  const [testState, setTestState] = useState([])
+const App = (props) => {
+  const [items, setItems] = useState([])
+  const [month, setMonth] = useState('')
+  const [day, setDay] = useState('')
+  const [event, setEvent] = useState('')
 
-  useEffect(() => {
-    axios('/read')
+  // look up destructuring e.target.value using hooks
+  const handleChange = (e) => {
+    if (e.target.name === 'month') {
+      setMonth(e.target.value)
+    } else {
+      setDay(e.target.value)
+    }
+  }
+  const handleSubmit = (e) => {
+    let date = {}
+    date.month = month
+    date.day = day
+    date.lookup = Date.now()
+    axios.post('/', date)
     .then(res => {
-      console.log('data retrieved:', res.data)
-      setTestState(res.data)
+      console.log('client test', res.data)
+      setItems(res.data)
+      setEvent(res.data[0].event)
     })
-    .catch(err => console.log('client GET req error:', err))
+  }
+  useEffect(() => {
+    axios('/items')
+    .then(res => {
+      setItems(res)
+    })
   }, [])
-
   return (
-    <Container>
+    <div>
+      <h1>Type Your Birthday! 🎂</h1>
 
-      <Column>
-        <Title>React running!</Title>
-        <Emoji>⚛️</Emoji>
-        {testState.length === 0? 'No data to display.' : <List testState={testState}/>}
-      </Column>
+      <input type="text" name="month" placeholder="Month (January)" onChange={handleChange}/>
+      <input type="text" name="day" placeholder="Day (1)" onChange={handleChange}/>
+      <button onClick={handleSubmit}>Submit</button>
 
-    </Container>
+      <p></p><Blurb birthday={event} month={month} day={day}/>
+
+      <List items={items}/>
+    </div>
   )
 }
 
