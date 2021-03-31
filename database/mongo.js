@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const dotenv = require('dotenv').config()
 mongoose.connect(`mongodb://localhost/${process.env.MONGO_DB}`, {useNewUrlParser: true, useUnifiedTopology: true});
 
 const db = mongoose.connection;
@@ -6,17 +7,20 @@ const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => console.log('mongoose connected.'));
 
-const itemSchema = mongoose.Schema({
+const birthdaySchema = mongoose.Schema({
   date: String,
   event: String,
   lookup: Number,
 });
 
-const Birthday = mongoose.model('Item', itemSchema);
+const Birthday = mongoose.model('Item', birthdaySchema);
 
 let lastFive = async () => {
   try {
-    let results = await Birthday.find({}).sort({'lookup': -1}).limit(5)
+    let results = await Birthday
+    .find({})
+    .sort({'lookup': -1})
+    .limit(5)
     return results
     } catch(e) {
     console.log('db lastFive error:',e)

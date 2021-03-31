@@ -3,8 +3,8 @@ import ListItem from './ListItem.jsx';
 
 const List = (props) => (
   <div>
-    <h3> Last 5 Searches: </h3>
-    {props.items.map((item, index) => <ListItem key={index} item={item}/>)}
+    <h2> Last 5 Searches: </h2>
+    {props.list.map((date, index) => <ListItem key={index} date={date}/>)}
   </div>
 )
 
