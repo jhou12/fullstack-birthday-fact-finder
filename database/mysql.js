@@ -34,7 +34,7 @@ const lastFive = async () => {
   try {
     let results = await Birthday.findAll({
       raw: true,
-      order: sequelize.col('lookup'),
+      order: [['lookup', 'DESC']],
       limit: 5,
     })
     return results
@@ -45,10 +45,18 @@ const lastFive = async () => {
 
 const save = async (doc) => {
   try {
-    await Birthday.findOrCreate({
+    let find = await Birthday.findOrCreate({
       defaults: doc,
       where: { date: doc.date }
     })
+    console.log('find test', find)
+    if (!find[1]) {
+      let id = find[0].dataValues.id
+      await Birthday.update(
+        {lookup: doc.lookup},
+        {where: {id}}
+        )
+    }
     let results = await lastFive()
     return results
   } catch(e) {

@@ -2,8 +2,8 @@ const express = require('express');
 const app = express();
 const port = 3000
 const axios = require('axios');
-// const db = require('../database/mysql.js'); // USE FOR MYSQL
-const db = require('../database/mongo.js'); // USE FOR MONGO
+const db = require('../database/mysql.js'); // USE FOR MYSQL
+// const db = require('../database/mongo.js'); // USE FOR MONGO
 
 app.use(express.static('client/dist'));
 app.use(express.json())
@@ -29,10 +29,12 @@ app.post('/newDate', async (req, res) => {
   let cased = req.body.month.toLowerCase()
   if (months[cased]) {
     let apiRes = await axios(`http://history.muffinlabs.com/date/${months[cased]}/${req.body.day}}`)
-
     let event = apiRes.data.data.Events[0].text
-      let doc = {"date": `${cased} ${req.body.day}`, "event": event, "lookup": req.body.lookup}
-
+      let doc = {
+        "date": `${cased} ${req.body.day}`,
+        "event": event,
+        "lookup": req.body.lookup
+      }
       let results = await db.save(doc)
       res.status(200).send(results)
   } else {

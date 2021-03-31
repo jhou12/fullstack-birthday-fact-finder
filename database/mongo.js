@@ -25,7 +25,11 @@ let lastFive = async () => {
 
 let save = async (doc) => {
   try {
-    await Birthday.findOneAndUpdate({"date": doc.date}, doc, {upsert: true, useFindAndModify: false})
+    await Birthday.findOneAndUpdate(
+      {"date": doc.date},
+      doc,
+      {upsert: true, useFindAndModify: false}
+      )
     let results = await lastFive()
     let formatted = results.map(date => {
       return date._doc

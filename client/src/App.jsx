@@ -4,19 +4,11 @@ import Blurb from './Blurb.jsx';
 import List from './List.jsx';
 
 const App = (props) => {
-  const [items, setItems] = useState([])
+  const [list, setList] = useState([])
   const [month, setMonth] = useState('')
   const [day, setDay] = useState('')
   const [event, setEvent] = useState('')
 
-  // look up destructuring e.target.value using hooks
-  const handleChange = (e) => {
-    if (e.target.name === 'month') {
-      setMonth(e.target.value)
-    } else {
-      setDay(e.target.value)
-    }
-  }
   const handleSubmit = (e) => {
     let date = {}
     date.month = month
@@ -25,27 +17,27 @@ const App = (props) => {
     axios.post('/newDate', date)
     .then(res => {
       console.log('client test', res.data)
-      setItems(res.data)
+      setList(res.data)
       setEvent(res.data[0].event)
     })
   }
   useEffect(() => {
     axios('/lastFiveDates')
     .then(res => {
-      setItems(res.data)
+      setList(res.data)
     })
   }, [])
   return (
     <div>
-      <h1>Type Your Birthday! 🎂</h1>
+      <h1>Birthday Fact Finder 🎂</h1>
 
-      <input type="text" name="month" placeholder="Month (January)" onChange={handleChange}/>
-      <input type="text" name="day" placeholder="Day (1)" onChange={handleChange}/>
+      <input type="text" name="month" placeholder="Month (January)" onChange={e => setMonth(e.target.value)}/>
+      <input type="text" name="day" placeholder="Day (1)" onChange={e => setDay(e.target.value)}/>
       <button onClick={handleSubmit}>Submit</button>
 
-      <p></p><Blurb birthday={event} month={month} day={day}/>
+      <p></p><Blurb event={event}/>
 
-      <List items={items}/>
+      <List items={list}/>
     </div>
   )
 }
