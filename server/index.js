@@ -12,13 +12,22 @@ app.use(express.urlencoded({extended: true}))
 
 app.post('/newDate', async (req, res) => {
   try {
-    console.log('server test', req.body)
     let doc = await apiReq(req.body)
     let results = await db.save(doc)
     res.status(200).send(results)
 } catch(e) {
-  console.log('server post error:',e)
-  res.status(404).send()
+    console.log('server post error:',e)
+    res.status(404).send()
+  }
+})
+
+app.delete('/deleteDate', async (req, res) => {
+  try {
+    let results = await db.del(req.body)
+    res.status(200).send(results)
+  } catch(e) {
+    console.log('server delete error:',e)
+    res.status(404).send()
   }
 })
 

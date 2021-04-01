@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import DropdownMonth from './DropdownMonth.jsx'
 import DropdownDay from './DropdownDay.jsx'
+import styled from 'styled-components';
+import Styled, { SelectContainer, MonthStyled, DayStyled, FindMyFact } from './Styles.js';
 
 const Dropdown = (props) => {
   const [month, setMonth] = useState('')
@@ -11,12 +13,11 @@ const Dropdown = (props) => {
     days.push(i)
   }
   const onSubmit = () => {
-    // console.log(month, day)
     props.handleSubmit(month, day)
   }
   return (
-    <div>
-      <select
+    <SelectContainer>
+      <MonthStyled
       value={month}
       onChange={e => setMonth(e.target.value)}
       >
@@ -26,22 +27,22 @@ const Dropdown = (props) => {
         value={index}
         key={index}/>
         )}
-      </select>
+      </MonthStyled>
 
-      <select
+      <DayStyled
       value={day}
       onChange={e => setDay(e.target.value)}
       >
         {days.map((day,index) =>
         <DropdownDay
-        value={index}
+        value={day}
         key={index}
         />
         )}
-      </select>
+      </DayStyled>
 
-      <button onClick={onSubmit}>Find my fact!</button>
-    </div>
+      <FindMyFact onClick={onSubmit}>Find my fact!</FindMyFact>
+    </SelectContainer>
   )
 }
 

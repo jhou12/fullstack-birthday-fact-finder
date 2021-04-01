@@ -1,14 +1,16 @@
 import React from 'react'
+import styled from 'styled-components';
+import Styled, { BlurbStyled, OnThisDay, HappyBirthday } from './Styles.js'
 
 const Blurb = (props) => {
   if (props.event === '') {
     return <div></div>
   } else {
-    console.log('props test', props)
     return (
-      <div id="blurb">
-        <h2>On this day: {props.event} <br/>HAPPY BIRTHDAY!!! 🎉 🎉 🎉</h2>
-      </div>
+      <BlurbStyled>
+        <OnThisDay>On this day:</OnThisDay> {props.event}
+        <HappyBirthday>HAPPY BIRTHDAY!!! 🎉 🎉 🎉</HappyBirthday>
+      </BlurbStyled>
     )
   }
 }

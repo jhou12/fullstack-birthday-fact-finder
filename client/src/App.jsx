@@ -3,42 +3,52 @@ import axios from 'axios';
 import Dropdown from './Dropdown.jsx';
 import Blurb from './Blurb.jsx';
 import List from './List.jsx';
+import Title from './Title.jsx';
+import styled from 'styled-components';
+import Styles, { Container, Column, SelectHeader } from './Styles.js';
 
 const App = (props) => {
   const [event, setEvent] = useState('')
   const [list, setList] = useState([])
 
   const handleSubmit = (month, day) => {
-    console.log('month day test', month, day)
     let entry = {}
     entry.month = month
     entry.day = day
     entry.lookup = Date.now()
     axios.post('/newDate', entry)
     .then(res => {
-      console.log('client test', res.data)
       setList(res.data)
       setEvent(res.data[0].event)
+    })
+  }
+  const handleDelete = (date) => {
+    axios.delete('/deleteDate', {
+      auth: {user: 'root'},
+      data: {date},
+    })
+    .then(res => {
+      setList(res.data)
     })
   }
   useEffect(() => {
     axios('/lastFiveDates')
     .then(res => {
-      console.log(res.data)
       setList(res.data)
     })
   }, [])
   return (
-    <div>
-      <h1>Birthday Fact Finder 🎂</h1>
+    <Container>
+      <Column>
 
-      Select your birthday:
+      <Title/>
+      <SelectHeader>Select your birthday:</SelectHeader>
       <Dropdown handleSubmit={handleSubmit}/>
-
       <Blurb event={event}/>
+      <List list={list} handleDelete={handleDelete}/>
 
-      <List list={list}/>
-    </div>
+      </Column>
+    </Container>
   )
 }
 

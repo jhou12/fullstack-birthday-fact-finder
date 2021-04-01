@@ -40,6 +40,7 @@ const lastFive = async () => {
     return results
   } catch(e) {
     console.log('db lastFive error:',e)
+    throw e
   }
 }
 
@@ -49,7 +50,6 @@ const save = async (doc) => {
       defaults: doc,
       where: { date: doc.date }
     })
-    console.log('find test', find)
     if (!find[1]) {
       let id = find[0].dataValues.id
       await Birthday.update(
@@ -61,10 +61,23 @@ const save = async (doc) => {
     return results
   } catch(e) {
     console.log('db save error:',e)
+    throw e
+  }
+}
+
+const del = async (date) => {
+  try {
+    await Birthday.destroy({ where: date })
+    let results = await lastFive()
+    return results
+  } catch(e) {
+    console.log('db delete error:',e)
+    throw e
   }
 }
 
 module.exports = {
   lastFive,
   save,
+  del,
 }

@@ -1,9 +1,19 @@
 import React from 'react';
+import styled from 'styled-components';
+import Styles, { ListItemStyled, DateStyled, DeleteButton, Space } from './Styles.js'
 
 const ListItem = (props) => (
-  <div id="item">
-    <h3>{props.date.date}: {props.date.event}</h3><p></p>
-  </div>
+  <ListItemStyled>
+    <DateStyled>🍰 {props.date.date}</DateStyled>
+    <div>
+      <DeleteButton
+      onClick={()=>props.handleDelete(props.date.date)}>
+      x
+      </DeleteButton>
+      <Space></Space>
+      <div>{props.date.event}</div>
+    </div>
+  </ListItemStyled>
 )
 
 export default ListItem;

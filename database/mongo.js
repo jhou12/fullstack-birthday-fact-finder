@@ -24,6 +24,7 @@ let lastFive = async () => {
     return results
     } catch(e) {
     console.log('db lastFive error:',e)
+    throw e
   }
 }
 
@@ -35,16 +36,26 @@ let save = async (doc) => {
       {upsert: true, useFindAndModify: false}
       )
     let results = await lastFive()
-    let formatted = results.map(date => {
-      return date._doc
-    })
-    return formatted
+    return results
   } catch(e) {
     console.log('db save error:',e)
+    throw e
+  }
+}
+
+let del = async (date) => {
+  try {
+    await Birthday.deleteOne(date)
+    let results = await lastFive()
+    return results
+  } catch(e) {
+    console.log('db delete error:',e)
+    throw e
   }
 }
 
 module.exports = {
   lastFive,
   save,
+  del,
 }
