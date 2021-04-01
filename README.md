@@ -1,6 +1,6 @@
 # Fullstack Birthday Fact Finder
 
-App that persists and displays historical fact data retrieved from an API request based on a user's birthday. Made with the MERN/SERN stack (connection options available for both Mongo and MySQL), React Styled Components, and full CRUD functionality.
+App that persists and displays historical fact data retrieved from an API request based on a user's birthday. Built with the MERN stack (both MongoDB & MySQL available), React Styled Components, and full CRUD functionality.
 
 <p align="center">
 <img src="screenshot.png" width="350"/>
